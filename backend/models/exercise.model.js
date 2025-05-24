@@ -21,7 +21,7 @@ const exerciseSchema = new mongoose.Schema({
     sets:[
         {
             type:mongoose.Schema.Types.ObjectId,
-            ref:"Sets"
+            ref:"Set"
         }
     ]
 },{timestamps:true})
