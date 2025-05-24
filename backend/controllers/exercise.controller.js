@@ -37,9 +37,9 @@ export const updateExercise = TryCatch(async (req, res) => {
     })
 });
 export const deleteExercise = TryCatch(async (req, res) => {
-    const { workoutId } = req.params;
+    const { exerciseId } = req.params;
 
-    const exercise = await Exercise.findByIdAndDelete(workoutId);    
+    const exercise = await Exercise.findByIdAndDelete(exerciseId);    
 
     return res.status(200).json({
         message:"Deleted Successfully !",
