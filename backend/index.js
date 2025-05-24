@@ -5,6 +5,7 @@ import cors from 'cors'
 import { connectDB } from './utils/database.js';
 import userRoute from './routes/user.routes.js'
 import workoutRoute from './routes/workout.routes.js'
+import exerciseRoute from './routes/exercise.routes.js'
 
 dotenv.config({})
 connectDB()
@@ -23,6 +24,7 @@ app.use(cors(corsOptions))
 //API ROUTES
 app.use('/api/v1/user',userRoute)
 app.use('/api/v1/workout',workoutRoute)
+app.use('/api/v1/exercise',exerciseRoute)
 
 
 const PORT = process.env.PORT || 3000

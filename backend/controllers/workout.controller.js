@@ -44,8 +44,8 @@ export const getAllWorkouts = TryCatch(async(req,res) => {
 
 export const getWorkoutById = TryCatch(async(req,res) => {
     const workoutId = req.params.id
-
-    const workout = await Workout.findById(workoutId)
+// need to add populate method for the sets aswell
+    const workout = await Workout.findById(workoutId).populate("exercises")
     if(!workout){
         return res.status(404).json({
             message:"Workout not found",

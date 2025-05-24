@@ -14,14 +14,16 @@ const exerciseSchema = new mongoose.Schema({
         enum:["strength","cardio","stretching"],
         default:"strength"
     },
-    sets:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"Set"
-    },
     workout:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"Workout"
     },
+    sets:[
+        {
+            type:mongoose.Schema.Types.ObjectId,
+            ref:"Sets"
+        }
+    ]
 },{timestamps:true})
 
 export const Exercise = mongoose.model("Exercise",exerciseSchema)
