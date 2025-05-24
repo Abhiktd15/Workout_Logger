@@ -15,9 +15,6 @@ const workoutSchema = new mongoose.Schema({
     endTime:{
         type:Date
     },
-    duration:{
-        type:Number
-    },
     isCompleted:{
         type:Boolean,
         default:false
@@ -29,12 +26,6 @@ const workoutSchema = new mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref:"User"
     },
-    exercises:[
-        {
-            type:mongoose.Schema.Types.ObjectId,
-            ref:"Exercise"
-        }
-    ]
 },{timestamps:true})
 
 export const Workout = mongoose.model("Workout",workoutSchema)

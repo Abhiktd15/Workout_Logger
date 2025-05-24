@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors'
 import { connectDB } from './utils/database.js';
 import userRoute from './routes/user.routes.js'
+import workoutRoute from './routes/workout.routes.js'
 
 dotenv.config({})
 connectDB()
@@ -21,6 +22,7 @@ app.use(cors(corsOptions))
 
 //API ROUTES
 app.use('/api/v1/user',userRoute)
+app.use('/api/v1/workout',workoutRoute)
 
 
 const PORT = process.env.PORT || 3000
