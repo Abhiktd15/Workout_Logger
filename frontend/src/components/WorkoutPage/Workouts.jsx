@@ -3,12 +3,13 @@ import Navbar from '../shared/Navbar'
 import { EllipsisHorizontalIcon, PlusIcon } from '@heroicons/react/24/outline'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Link } from 'react-router-dom'
+import AddWorkoutDialog from './AddWorkoutDialog'
 
 const workout = [1,2,3,4]
 
 const Workouts = () => {
+    const [open,setOpen] = useState(false)
 
-    
     return (
         <div className=''>
             <Navbar/>
@@ -20,7 +21,7 @@ const Workouts = () => {
                 <div className='text-white flex  gap-10 '>
                     <div  className='w-1/3 border h-fit rounded-xl  p-4 bg-customGray'>
                         <h1  className='text-xl font-bold'>My Workout Routines</h1>
-                        <button className='border rounded-lg flex items-center py-2 bg-[#323232] text-lg mt-5  hover:scale-105 justify-between gap-4  px-4 '>
+                        <button onClick={() => setOpen(true)} className='border rounded-lg flex items-center py-2 bg-[#323232] text-lg mt-5  hover:scale-105 justify-between gap-4  px-4 '>
                             Add New Routine <PlusIcon className='w-6'/>
                         </button>
                     </div>
@@ -57,6 +58,7 @@ const Workouts = () => {
                     </div>
                 </div>
             </div>
+            <AddWorkoutDialog open={open} setOpen={setOpen}/>
         </div>
     )
 }
