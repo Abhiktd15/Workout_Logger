@@ -38,17 +38,16 @@ const Navbar = () => {
                 <div className="flex items-center gap-10">
                 <ul className="flex font-bold items-center gap-5 ">
                         <>
-                            <Link to='/' className="text-white hover:text-[#6044CF]" >Home</Link>
-                            <Link to='/jobs' className="text-white hover:text-[#6044CF]">Jobs</Link>
-                            <Link to="/browse" className="text-white hover:text-[#6044CF]">Browse</Link>
+                            <Link to='/' className="text-white   border border-gray-500 px-2 rounded-lg py-1 hover:scale-105  " >Home</Link>
+                            <Link to='/workout' className="text-white   border border-gray-500 px-2 rounded-lg py-1 hover:scale-105 ">Workout Routines</Link>
                         </>
                 </ul>
 
                 {
                     !user ? (
                         <div className=" flex items-center gap-2">
-                            <Link to={'/login'}><Button className='border font-semibold rounded-md border-gray-500 px-3 py-2 hover:scale-105'>Login</Button></Link>
-                            <Link to={'/signup'}><Button className='border font-semibold rounded-md text-white px-3 py-2 bg-[#6A38C2] hover:scale-105 hover:bg-[#502c8e]'>Sign Up</Button></Link>
+                            <Link to={'/login'}><Button className='border font-semibold rounded-lg border-gray-500 px-3 text-white py-2 hover:scale-105'>Login</Button></Link>
+                            <Link to={'/signup'}><Button className='border font-semibold rounded-lg text-white px-3 py-2 bg-customBlue hover:scale-105 hover:bg-blue-400'>Sign Up</Button></Link>
                         </div>
                     ):(
                         <div className="text-black">

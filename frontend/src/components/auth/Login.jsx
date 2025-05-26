@@ -47,12 +47,12 @@ const Login = () => {
       <Navbar/>
       <div className="flex  flex-1 flex-col  justify-center mx-auto items-center px-6 py-12 lg:px-8 text-white  ">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm  ">
-          <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight ">
-            Login
+          <h2 className="mt-10 text-center text-4xl font-bold tracking-tight ">
+            Log In
           </h2>
         </div>
 
-        <div className="mt-10 sm:mx-auto sm:w-full max-sm:max-w-md max-w-xl  ">
+        <div className="mt-10 sm:mx-auto sm:w-full max-sm:max-w-md max-w-lg  ">
           <form  className='flex flex-col gap-4'>
 
             <div>
@@ -67,7 +67,6 @@ const Login = () => {
                   name='email'
                   value={input.email}
                   onChange={changeEventHandler}
-                  placeholder='Enter Email Address'
                   required
                   className="block w-full rounded-md border border-gray-200 bg-[#09090B] px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-black placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2   sm:text-sm/6"
                 />
@@ -83,7 +82,6 @@ const Login = () => {
               <div className="mt-1">
                 <input 
                   type='password'
-                  placeholder='Enter Password'
                   name='password'
                   value={input.password}
                   onChange={changeEventHandler}
@@ -98,9 +96,9 @@ const Login = () => {
                 loading ? <button 
                 className='flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'>Loading....</button>:<button
                 type="submit"
-                className="flex w-full justify-center rounded-md bg-[#6044CF] px-3 py-1.5 text-lg font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                className="flex w-full justify-center rounded-md bg-customBlue mt-10 px-3 py-1.5 text-lg font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
-                Login
+                Log In
               </button>
               }
               <div className='text-base font-semibold mt-5'>
