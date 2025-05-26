@@ -27,8 +27,9 @@ export const createExercise = TryCatch(async (req, res) => {
 
 export const updateExercise = TryCatch(async (req, res) => {
     const { workoutId } = req.params;
+    const {exerciseId} = req.body
 
-    const exercise = await Exercise.findOneAndUpdate({workout:workoutId},req.body,{new:true});    
+    const exercise = await Exercise.findOneAndUpdate({workout:workoutId,_id:exerciseId},req.body,{new:true});    
 
     return res.status(200).json({
         message:"Updated Successfully !",
