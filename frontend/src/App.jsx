@@ -13,6 +13,7 @@ import Workouts from "./components/WorkoutPage/Workouts"
 import { USER_API_END_POINT } from "./constants"
 import {  setUser } from "./redux/authSlice"
 import { useState } from "react"
+import UserProfile from "./components/Profile/UserProfile"
 
 const route = createBrowserRouter([  
   {
@@ -39,6 +40,12 @@ const route = createBrowserRouter([
     path:"/workout/:workoutId",
     element:<ProtectedRoute>
       <WorkoutDetails/>
+    </ProtectedRoute>
+  },
+  {
+    path:"/profile",
+    element:<ProtectedRoute>
+      <UserProfile/>
     </ProtectedRoute>
   },
 ])

@@ -103,3 +103,35 @@ export const deleteWorkout = TryCatch(async (req,res) => {
         success:true
     })
 })
+
+export const getPreviusWorkouts = TryCatch(async (req, res) => {
+    const userId = req.id;
+
+    // Get the date 3 days ago from now
+    const threeDaysAgo = new Date();
+    threeDaysAgo.setDate(threeDaysAgo.getDate()-2); // includes today, yesterday, and the day before
+
+    threeDaysAgo.setHours(0, 0, 0, 0);
+
+    const workouts = await Workout.find({
+        user: userId,
+        createdAt: { $gte: threeDaysAgo }
+    }).populate({
+        path:"exercises",
+        populate:{
+            path:'sets'
+        }
+    }).populate('user',"-password").sort({createdAt:-1});
+
+    if (!workouts || workouts.length === 0) {
+        return res.status(404).json({
+        message: "No workouts found from the last 3 days!",
+        success: false,
+        });
+    }
+
+    return res.status(200).json({
+        workout: workouts,
+        success: true,
+    });
+});

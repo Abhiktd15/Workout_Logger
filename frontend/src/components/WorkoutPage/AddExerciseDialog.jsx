@@ -1,6 +1,9 @@
+import axios from "axios";
 import { useEffect, useRef, useState } from "react";
+import { EXERCISE_API_END_POINT } from "../../constants";
+import { toast } from "react-toastify";
 
-const AddExerciseDialog = ({ open, setOpen }) => {
+const AddExerciseDialog = ({ open, setOpen,refetch,workoutId }) => {
     const [loading,setLoading] = useState(false)
 
     const [input,setInput] = useState({
@@ -13,14 +16,30 @@ const AddExerciseDialog = ({ open, setOpen }) => {
     const changeEventHandler = (e) => {
         setInput({...input,[e.target.name] :e.target.value})
     }
-    // const fileChangeHandler = (e) => {
-    //     const file = e.target.files?.[0]
-    //     setInput({...input,file})
-    // }
     const submitHandler = async(e) => {
         e.preventDefault();
-        console.log(input)
-        setOpen(false)
+        try {
+            setLoading(true)
+            const res = await axios.post(`${EXERCISE_API_END_POINT}/${workoutId}`,input,{
+                headers:{
+                    "Content-Type":"application/json"
+                },
+                withCredentials:true
+            })
+
+            if(res.data.success){
+                toast.success(res.data.message);
+                refetch(workoutId);
+            }
+        } catch (error) {
+            console.log(error)
+            toast.error(error.response.data.message)
+        }finally{
+            setLoading(false)
+            setOpen(false)
+        }
+        
+        
     }
     
     const dialogRef = useRef(null);
