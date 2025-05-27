@@ -1,6 +1,11 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Navbar from '../shared/Navbar'
+import { useDispatch, useSelector } from 'react-redux'
+import { USER_API_END_POINT } from '../../constants'
+import { setLoading, setUser } from '../../redux/authSlice'
+import axios from 'axios'
+import { toast } from 'react-toastify'
 
 const Login = () => {
   const [input,setInput] = useState({
@@ -8,39 +13,38 @@ const Login = () => {
       password:"",
       role:"",
     })
-    // const navigate = useNavigate()
-    // const dispatch = useDispatch()
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
 
-    // const {loading} = useSelector(state => state.auth)
-    const [loading,setLoading] = useState(false)
+    const {loading} = useSelector(state => state.auth)
   
     const changeEventHandler = (e) => {
       setInput({...input,[e.target.name]: e.target.value})
     }
   
-//     const submitHandler = async (e) => {
-//     e.preventDefault();
+    const submitHandler = async (e) => {
+    e.preventDefault();
     
-//     try {
-//       dispatch(setLoading(true))
-//       const res = await axios.post(`${USER_API_END_POINT}/login`,input,{
-//         headers:{
-//           "Content-Type":"application/json"
-//         },
-//         withCredentials:true
-//       })
-//       if(res.data.success){
-//         dispatch(setUser(res.data.user))
-//         navigate('/')
-//         toast.success(res.data.message)
-//       }
-//     } catch (error) {
-//       console.log(error)
-//       toast.error(error.response.data.message)
-//     }finally{
-//       dispatch(setLoading(false))
-//     }
-//   }
+    try {
+      dispatch(setLoading(true))
+      const res = await axios.post(`${USER_API_END_POINT}/login`,input,{
+        headers:{
+          "Content-Type":"application/json"
+        },
+        withCredentials:true
+      })
+      if(res.data.success){
+        dispatch(setUser(res.data.user))
+        navigate('/')
+        toast.success(res.data.message)
+      }
+    } catch (error) {
+      console.log(error)
+      toast.error(error.response.data.message)
+    }finally{
+      dispatch(setLoading(false))
+    }
+  }
   
   return (
     <div className='h-screen'>
@@ -53,7 +57,7 @@ const Login = () => {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full max-sm:max-w-md max-w-lg  ">
-          <form  className='flex flex-col gap-4'>
+          <form onSubmit={submitHandler}  className='flex flex-col gap-4'>
 
             <div>
               <div className="flex items-center justify-between">

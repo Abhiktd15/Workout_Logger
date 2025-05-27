@@ -22,10 +22,12 @@ export const registerUser = TryCatch(async (req,res) => {
     }
     
     const file = req.file;
+    console.log(file)
     let fileURI; 
     let cloudResponse;
 
     if(file){
+        console.log("working1")
         fileURI = getDataUri(file)
         cloudResponse = await cloudinary.uploader.upload(fileURI.content)
     }
@@ -42,7 +44,7 @@ export const registerUser = TryCatch(async (req,res) => {
         } 
     })
     const doc = await user.save()
-
+    console.log(doc,"working 2")
     const tokenData = {
         userId : doc._id
     }
@@ -51,7 +53,13 @@ export const registerUser = TryCatch(async (req,res) => {
     return res.
         cookie("token",token,{maxAge:1*24*60*60*1000,httpsOnly:true,sameSite:"strict"})
         .status(201).json({
-            message:"User Registered Successfully",
+            message:`Welcome Back ${doc.fullName}`,
+            user:{
+                _id:doc._id,
+                fullName:doc.fullName,
+                profile:doc.profile,
+                email:doc.email
+            },
             success:true
         })
 

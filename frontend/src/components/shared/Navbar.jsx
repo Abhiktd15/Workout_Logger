@@ -6,29 +6,36 @@ import {
     MenuItems
 } from "@headlessui/react";
 import { ArrowRightStartOnRectangleIcon, UserIcon } from '@heroicons/react/24/outline';
-import { Link } from "react-router-dom";
+import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
+import { USER_API_END_POINT } from "../../constants";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "../../redux/authSlice";
+import { toast } from "react-toastify";
 
 const Navbar = () => {
-    // const dispatch = useDispatch();
-    // const navigate  = useNavigate();
+    const dispatch = useDispatch();
+    const navigate  = useNavigate();
 
-    // const logoutHandler = async() => {
-    //     try {
-    //         const res = await axios.get(`${USER_API_END_POINT}/logout`,{withCredentials: true,})
-    //         if(res.data.success){
-    //             dispatch(setUser(null))
-    //             navigate("/")
-    //             toast.success(res.data.message)
-    //         }
-    //     } catch (error) {
-    //         console.log(error);
-    //         toast.error(error.response.data.message)
-    //     }
-    // }
-    const user = false
+    const {user } = useSelector(state => state.auth)
+
+    const logoutHandler = async() => {
+        try {
+            const res = await axios.get(`${USER_API_END_POINT}/logout`,{withCredentials: true,})
+            if(res.data.success){
+                dispatch(setUser(null))
+                navigate("/")
+                toast.success(res.data.message)
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error(error.response.data.message)
+        }
+    }
+    
 
     return (
-        <div className="">
+        <div className="px-10">
             <div className="flex items-center justify-between mx-auto max-w-7xl h-16">
                 <div>
                 <h1 className="text-2xl font-bold text-white">
@@ -50,34 +57,34 @@ const Navbar = () => {
                             <Link to={'/signup'}><Button className='border font-semibold rounded-lg text-white px-3 py-2 bg-customBlue hover:scale-105 hover:bg-blue-700'>Sign Up</Button></Link>
                         </div>
                     ):(
-                        <div className="text-black">
+                        <div className="">
                             {/* Avatar Dropdown Menu  */}
-                            <Menu as="div" className="relative ml-3 ">
+                            <Menu as="div" className="relative ml-3  ">
                                 <div>
                                 <MenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden">
                                     <span className="absolute -inset-1.5" />
                                     <span className="sr-only">Open user menu</span>
                                     <img
                                     alt="Profile Icon"
-                                    src=""
+                                    src={user?.profile?.url}
                                     className="size-10 rounded-full"
                                     />
                                 </MenuButton>
                                 </div>
                                 <MenuItems
                                 transition
-                                className="absolute right-0 space-y-4 z-10 mt-2 w-80 origin-top-right rounded-md bg-white p-5 shadow-lg ring-1 ring-black/5 transition focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
+                                className="absolute z-50 bg-customGray  right-0 space-y-4  mt-2 w-80 origin-top-right rounded-md  p-5 shadow-lg ring-1 ring-black/5 transition focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
                                 >
                                 <MenuItem>
                                     <div className="flex items-center gap-4 ">
                                         <img
                                             alt="Profile Photo"
-                                            src=""
+                                            src={user?.profile?.url}
                                             className="size-10 rounded-full"
                                             />
                                         <div>
-                                            <h4 className="font-medium">abhishek</h4>
-                                            <p className="text-sm ">hleo</p>
+                                            <h4 className="font-medium">{user?.fullName}</h4>
+                                            <p className="text-sm ">{user?.email}</p>
                                         </div>
                                     </div>
                                 </MenuItem>
@@ -88,7 +95,7 @@ const Navbar = () => {
                                         </Link>
                                 </MenuItem>
                                 <MenuItem>
-                                    <div className="flex gap-4 items-center ml-2 w-fit cursor-pointer  ">
+                                    <div onClick={logoutHandler} className="flex gap-4 items-center ml-2 w-fit cursor-pointer  ">
                                         <ArrowRightStartOnRectangleIcon height={25}/>
                                         <p className=" hover:underline font-semibold">Log Out</p>
                                     </div>

@@ -1,6 +1,12 @@
+import axios from "axios";
 import { useEffect, useRef, useState } from "react";
+import { WORKOUT_API_END_POINT } from "../../constants";
+import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import useFetchWorkouts from "../../hooks/useFetchWorkouts";
+import { useNavigate } from "react-router-dom";
 
-const AddWorkoutDialog = ({ open, setOpen }) => {
+const AddWorkoutDialog = ({ open, setOpen, refetch }) => {
     const [loading,setLoading] = useState(false)
 
     const [input,setInput] = useState({
@@ -11,16 +17,32 @@ const AddWorkoutDialog = ({ open, setOpen }) => {
         notes:""
     })
 
+    const navigate = useNavigate()
     const changeEventHandler = (e) => {
         setInput({...input,[e.target.name] :e.target.value})
     }
-    // const fileChangeHandler = (e) => {
-    //     const file = e.target.files?.[0]
-    //     setInput({...input,file})
-    // }
     const submitHandler = async(e) => {
         e.preventDefault();
-        console.log(input)
+        try {
+            setLoading(true)
+            const res = await axios.post(`${WORKOUT_API_END_POINT}/add`,input,{
+                headers:{
+                    "Content-Type":"application/json"
+                },
+                withCredentials:true
+            })
+            if(res?.data?.success){
+                toast.success(res?.data?.message)
+                refetch()
+            }
+        } catch (error) {
+            console.log(error)
+            toast.error(error?.response?.data?.message)
+        }finally{
+            setLoading(false)
+        }
+        
+
         setOpen(false)
     }
     
@@ -51,54 +73,65 @@ const AddWorkoutDialog = ({ open, setOpen }) => {
             <form  onSubmit={submitHandler}>
                 <div className="flex flex-col gap-4 mb-4 text-gray-300">
                     <div className="grid grid-cols-4 gap-4 items-center">
-                        <label htmlFor="name" className="text-right text-lg font-medium ">Title</label>
+                        <label htmlFor="name" className="text-right text-lg font-medium ">Title *</label>
                         <input
                         id="title"
                         type="text"
                         name="title"
                         value={input.title}
                         onChange={changeEventHandler}
-                        placeholder="Title"
-                        className="w-full border p-2  rounded col-span-3 bg-[#09090B]"
+                        className="w-full border p-2  rounded col-span-3 bg-white  text-black"
                         />
                     </div>
 
                     <div className="grid grid-cols-4 gap-4 items-center">
-                        <label htmlFor="email" className="text-right text-lg font-medium ">Start Time</label>
+                        <label htmlFor="email" className="text-right text-lg font-medium ">Date *</label>
+                        <input
+                        id="date"
+                        type="datetime-local"
+                        value={input.date}
+                        onChange={changeEventHandler}
+                        name="date"
+                        placeholder="Date"
+                        className="w-full border p-2 text-black font-bold rounded col-span-3 "
+                        />
+                    </div>
+
+                    <div className="grid grid-cols-4 gap-4 items-center">
+                        <label htmlFor="email" className="text-right text-lg font-medium ">Start Time *</label>
                         <input
                         id="startTime"
-                        type="time"
+                        type="datetime-local"
                         value={input.startTime}
                         onChange={changeEventHandler}
                         name="startTime"
                         placeholder="Start Time"
-                        className="w-full border p-2  rounded col-span-3 bg-[#09090B]"
+                        className="w-full border p-2 text-black font-bold rounded col-span-3 "
                         />
                     </div>
 
                     <div className="grid grid-cols-4 gap-4 items-center">
-                        <label htmlFor="phone" className="text-right text-lg font-medium ">End Time</label>
+                        <label htmlFor="phone" className="text-right text-lg font-medium ">End Time </label>
                         <input
                         id="endTime"
-                        type="time"
+                        type="datetime-local"
                         value={input.endTime}
                         onChange={changeEventHandler}
                         name="endTime"
                         placeholder="End Time"
-                        className="w-full border p-2  rounded col-span-3 bg-[#09090B]"
+                        className="w-full border p-2 text-black font-bold  rounded col-span-3 bg-white"
                         />
                     </div>
 
                     <div className="grid grid-cols-4 gap-4 items-center">
-                        <label htmlFor="skills" className="text-right text-lg font-medium ">Notes</label>
+                        <label htmlFor="skills" className="text-right text-lg font-medium ">Notes *</label>
                         <input
                         type="text"
                         value={input.notes}
                         onChange={changeEventHandler}
                         id="notes"
                         name="notes"
-                        placeholder="Notes..."
-                        className="w-full border p-2  rounded col-span-3 bg-[#09090B]"
+                        className="w-full border p-2  rounded col-span-3 bg-white"
                         />
                     </div>
 

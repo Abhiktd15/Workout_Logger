@@ -1,14 +1,35 @@
-import React, { useState } from 'react'
-import Navbar from '../shared/Navbar'
-import { EllipsisHorizontalIcon, PlusIcon } from '@heroicons/react/24/outline'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
-import { Link } from 'react-router-dom'
+import { EllipsisHorizontalIcon, PlusIcon } from '@heroicons/react/24/outline'
+import { useState } from 'react'
+import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import useFetchWorkouts from '../../hooks/useFetchWorkouts'
+import Navbar from '../shared/Navbar'
 import AddWorkoutDialog from './AddWorkoutDialog'
+import axios from 'axios'
+import { WORKOUT_API_END_POINT } from '../../constants'
+import { toast } from 'react-toastify'
 
-const workout = [1,2,3,4]
 
 const Workouts = () => {
+    const fetchAllWorkout = useFetchWorkouts()
     const [open,setOpen] = useState(false)
+    const navigate = useNavigate()
+    
+    const {workouts } = useSelector(state => state.workout)
+    const deleteHandler = async (workoutId) => {
+        try {
+            const res = await axios.delete(`${WORKOUT_API_END_POINT}/delete/${workoutId}`,{withCredentials:true})
+            if(res.data.success){
+                toast.success(res.data.message)
+                fetchAllWorkout()
+            }
+        } catch (error) {
+            console.log(error)
+            toast.error(error.response.data.message)
+        }
+    }
+    
 
     return (
         <div className=''>
@@ -25,13 +46,16 @@ const Workouts = () => {
                             Add New Routine <PlusIcon className='w-6'/>
                         </button>
                     </div>
-                    <div className='w-2/3 border rounded-lg p-4 bg-customGray'>
+                    <div className='w-2/3 border rounded-lg p-4 z-0 bg-customGray'>
                         <h1 className='text-xl font-bold'>My Routines (2)</h1>
                         <div className='p-6 gap-4 flex flex-col'>
-                            {workout.map((item)=>(
-                                <Link to={'/workout/34543534534'} className='flex items-center justify-between bg-[#323232] p-2 px-5 hover:bg-[#201f1f] cursor-pointer border rounded-lg'>
-                                    <button>Push Day</button>
-                                    <Menu as="div" className="relative inline-block text-left">
+                            {workouts.map((workout)=>(
+                                <div key={workout?._id}  className='flex items-center justify-between bg-[#323232] p-2 px-5 hover:bg-[#201f1f] cursor-pointer border rounded-lg'>
+                                    <div onClick={() => navigate(`/workout/${workout?._id}`)} className='w-3/4'>
+                                        <button  className=' text-start font-semibold text-md'>{workout?.title}</button>
+                                        <p className='text-gray-400 text-sm'>{workout?.createdAt?.split("T")[0]}</p>
+                                    </div>
+                                    <Menu as="div" className=" w-1/4  relative inline-block text-right ">
                                         <div>
                                             <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md   text-sm font-semibold text-white shadow-xs  ">
                                                 <EllipsisHorizontalIcon className='w-10'/>
@@ -40,25 +64,28 @@ const Workouts = () => {
 
                                         <MenuItems
                                             transition
-                                            className="absolute right-0 z-10 mt-2 w-36 origin-top-right rounded-md bg-customGray shadow-lg ring-1 ring-black/5 transition focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
+                                            className="absolute right-0 z-10 mt-2 w-36 origin-top-right rounded-md border border-white bg-customGray shadow-lg ring-1 ring-black/5 transition focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
                                         >
                                             <div>
                                                 <MenuItem>
-                                                    <h1 className="py-2 px-3 hover:bg-black">Edit Routine</h1>
+                                                    <h1 className="py-2 px-3 hover:bg-black">Start Routine</h1>
                                                 </MenuItem>
                                                 <MenuItem>
-                                                    <h1 className="py-2 px-3 hover:bg-black">Delete Routine</h1>
+                                                    <h1 onClick={() => navigate(`/workout/${workout?._id}`)} className="py-2 px-3 hover:bg-black">Edit Routine</h1>
+                                                </MenuItem>
+                                                <MenuItem>
+                                                    <h1 onClick={() => deleteHandler(workout?._id)} className="py-2 px-3 hover:bg-black">Delete Routine</h1>
                                                 </MenuItem>
                                             </div>
                                         </MenuItems>
                                     </Menu>
-                                </Link>
+                                </div>
                             ))}
                         </div>
                     </div>
                 </div>
             </div>
-            <AddWorkoutDialog open={open} setOpen={setOpen}/>
+            <AddWorkoutDialog open={open} setOpen={setOpen} refetch={fetchAllWorkout}/>
         </div>
     )
 }
