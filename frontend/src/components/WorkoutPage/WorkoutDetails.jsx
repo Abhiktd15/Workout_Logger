@@ -21,9 +21,7 @@ const WorkoutDetails = () => {
         { id: Date.now(), reps: "", weight: "", checked: false }
         ]);
     };
-
-    console.log(sets)
-
+    
     const handleChange = (index, field, value) => {
         const updatedSets = [...sets];
         updatedSets[index][field] = field === "checked" ? !sets[index][field] : value;

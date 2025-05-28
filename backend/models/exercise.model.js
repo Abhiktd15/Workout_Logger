@@ -18,6 +18,9 @@ const exerciseSchema = new mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref:"Workout"
     },
+    volume:{
+        type:Number,
+    },
     sets:[
         {
             type:mongoose.Schema.Types.ObjectId,
